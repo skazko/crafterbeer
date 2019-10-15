@@ -1,7 +1,6 @@
 import React, {Component } from 'react';
 import './App.css';
-import CrafterbeerService from './service/crafterbeerService';
- 
+import CrafterbeerService from './service/crafterbeerService'; 
 
 export default class App extends Component {
   state = {
@@ -75,16 +74,19 @@ export default class App extends Component {
               <p className="beer__description">{description}</p> 
               <h4>Характеристики:</h4>
               <table className="beer__features">
-                {
-                  tth.map(({ name, value }) => {
-                    return (
-                      <tr className="beer__feature" key={id + name + value}>
-                        <td className="beer__features-term">{name}</td>
-                        <td className="beer__features-value">{value}</td>
-                      </tr>
-                    );
-                  })
-                }
+                <tbody>
+                  {
+                    tth.map(({ name, value }) => {
+                      return (
+                        <tr className="beer__feature" key={id + name + value}>
+                          <td className="beer__features-term">{name}</td>
+                          <td className="beer__features-value">{value}</td>
+                        </tr>
+                      );
+                    })
+                  }
+                </tbody>
+                
               </table>
             </div>
           </li>

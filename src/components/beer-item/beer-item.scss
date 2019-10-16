@@ -1,0 +1,82 @@
+.beer-item {
+  display: flex;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid black;
+
+  &__image {
+    flex: 0 0 30%;
+    // background-color: blue;
+  }
+
+  &__information {
+    flex: 0 0 70%;
+    padding: 0;
+    padding-left: 10px;
+    // background-color: blueviolet;
+  }
+
+  &__features {
+    list-style: none;
+    margin: 0 -5px;
+    padding: 0;
+    display: flex;
+    margin-bottom: 10px;
+  }
+
+  &__feature-wrapper {
+    flex: 0 0 33.33333%;
+    text-align: center;
+    padding: 0 5px;
+  }
+
+  &__feature {
+    background-color: white;
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 2.25rem;
+    border-radius: 5px;
+    border: 1px solid black;
+
+    &_og::after {
+      content: 'OG';
+    }
+    &_abv::after {
+      content: 'ABV';
+    }
+    &_ibu::after {
+      content: 'IBU';
+    }
+    &::after {
+      display: block;
+      background-color: black;
+      font-size: 1rem;
+      color: white;
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+  }
+
+  &__style {
+    text-align: center;
+  }
+
+  &__price {
+    display: flex;
+    justify-content: center;
+    
+    &-value {
+      padding-left: 1rem;
+      line-height: 85px;
+      vertical-align: middle;
+      font-family: 'Alegreya Sans', sans-serif;
+      font-size: 4rem;
+      font-weight: 900;
+    }
+  }
+}
+
+.beer-image {
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid black;
+}

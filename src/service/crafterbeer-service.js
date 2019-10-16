@@ -36,6 +36,20 @@ export default class CrafterbeerService {
         return { name, value };
       }
     });
+
+    const features = attributes
+      .filter(({ id }) => id === 1 || id === 2 || id === 3)
+      .map(({id, options: [value]}) => {
+        const name = id === 1 ? 'abv' : id === 2 ? 'og' : 'ibu';
+        return {
+          name,
+          value: parseFloat(value.replace(/,/, ".").replace(/[^\d.]/g, ""))
+        }
+      });
+    
+    const brewery = attributes.find(({ id }) => id === 7).options[0];
+    const style = attributes.find(({ id }) => id === 6).options[0];
+
     
     //описания на сайте могут содержать теги, а также неактуальные фразы о цене
     const description = strip(short_description)
@@ -52,7 +66,10 @@ export default class CrafterbeerService {
       inStock: stock_status === 'instock' ? true : false,
       imgSrc,
       imgAlt: imgAlt || imgName,
-      tth
+      tth,
+      features,
+      brewery,
+      style
     }
   }
 }

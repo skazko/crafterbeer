@@ -1,32 +1,37 @@
 import React from 'react';
-import './beer-item.css';
+import Bottle from '../bottle';
+import './beer-item.scss';
 
 const BeerItem = ({ item }) => {
-  const {id, imgSrc, imgAlt, name, description, tth} = item;
+  const {id, imgSrc, imgAlt, features, style, price} = item;
   return (
     <li className="beer-item" key={id}>
       <div className="beer-item__image">
         <img className="beer-image" src={imgSrc} alt={imgAlt} />
       </div>
       <div className="beer-item__information">
-        <h3 className="beer-item__title">{name}</h3>
-        <p className="beer-item__description">{description}</p> 
-        <h4>Характеристики:</h4>
-        <table className="beer-item__features">
-          <tbody>
+        <ul className="beer-item__features">
             {
-              tth.map(({ name, value }) => {
+              features.map(({ name, value }) => {
                 return (
-                  <tr className="beer-item__feature" key={id + name + value}>
-                    <td className="beer-item__features-term">{name}</td>
-                    <td className="beer-item__features-value">{value}</td>
-                  </tr>
+                  <li className="beer-item__feature-wrapper" key={id + name + value}>
+                    <div className={`beer-item__feature beer-item__feature_${name}`}>
+                      {value}
+                    </div>
+                  </li>
                 );
               })
             }
-          </tbody>
-          
-        </table>
+        </ul>
+        {/* <p className="beer-item__style">{style}</p> */}
+        <div className="beer-item__price">
+          <Bottle vol="1л" />
+          <span className="beer-item__price-value">{price}р</span>
+        </div>
+        {/* <ul className="beer-item__price">
+          <li className="beer-item__full-price">{price}р</li>
+          <li className="beer-item__half-price">{price / 2 + 10}р</li>
+        </ul> */}
       </div>
     </li>
   );

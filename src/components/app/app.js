@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import BeerItem from '../beer-item';
-import CrafterbeerService from '../../service/crafterbeerService'; 
+import CrafterbeerService from '../../service/crafterbeer-service'; 
 import './app.css';
 
 export default class App extends Component {
@@ -15,6 +15,7 @@ export default class App extends Component {
   componentDidMount() {
     this.api.get()
       .then((data) => {
+        console.log(data);
         this.setState({
           data,
           loading: false,
@@ -40,7 +41,9 @@ export default class App extends Component {
     }
     return (
       <div className="dev-container">
-        <BeerItem item={data[0]} />
+        <ul>
+          <BeerItem item={data[2]} />
+        </ul>
       </div>
     )
   }

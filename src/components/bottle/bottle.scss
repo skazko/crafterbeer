@@ -1,0 +1,71 @@
+$border: 2px solid #333;
+
+.bottle {
+  $bottle-width: 30px;
+  margin: 0;
+  position: relative;
+  width: 30px;
+  height: 85px;
+
+  &__body {
+    width:$bottle-width;
+    position: absolute;
+    bottom: 0;
+    left: calc(50% - #{$bottle-width / 2});
+    height: 70px;
+    border: $border;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: rgb(128, 99, 62);
+  }
+
+  &__neck {
+    position: absolute;
+    border: $border;
+    width: $bottle-width /2.5;
+    height: 10px;
+    border-bottom: none;
+    left: calc(50% - #{($bottle-width / 2.5) / 2});
+    top: -10px;
+    background-color: rgb(128, 99, 62);
+  }
+
+  &__top {
+    position: absolute;
+    border: $border;
+    border-radius: 5px;
+    width: 14px;
+    height: 12px;
+    left: calc(50% - 7px);
+    background-color: rgb(114, 51, 0);
+    top: -17px;
+    z-index: 5;
+  }
+
+  &__sticker {
+    position: absolute;
+    top: 14px; 
+    left: calc(50% - 15px);
+    z-index: 5;
+    width: 30px;
+    height: 40px;
+    border: $border;
+    border-radius: 5px;
+    background-color: #fff;
+    text-align: center;
+  }
+
+  &__label {
+    font-size: 18px;
+    font-weight: 900;
+    color: #000;
+    line-height: 40px;
+    vertical-align: middle;
+    &_small {
+      font-size: 14px;
+      letter-spacing: -1px;
+    }
+  }
+}

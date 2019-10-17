@@ -1,11 +1,3 @@
 .dev-container {
-  padding: 20px 5px;
-  max-width: 500px;
   margin: 0 auto;
-}
-
-.dev-container > ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
 }

@@ -1,56 +1,66 @@
-$border: 2px solid #333;
+$bottle-width: 24px;
+$border-width: 2px;
+$border: $border-width solid #333;
+$bottle-body-color: rgb(128, 99, 62);
+
+$bottle-height: $bottle-width * 2.5;
+$bottle-body-height: $bottle-width * 2;
+$bottle-body-top-radius: $bottle-width / 2 - 5px; 
+$neck-width: $bottle-width / 2.5;
+$neck-height: $bottle-width / 3;
+$cap-width: $neck-width * 1.25;
+$cap-height: $neck-width;
 
 .bottle {
-  $bottle-width: 30px;
   margin: 0;
   position: relative;
-  width: 30px;
-  height: 85px;
+  width: $bottle-width;
+  height: $bottle-height;
 
   &__body {
-    width:$bottle-width;
+    width: $bottle-width;
     position: absolute;
     bottom: 0;
     left: calc(50% - #{$bottle-width / 2});
-    height: 70px;
+    height: $bottle-body-height;
     border: $border;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    background-color: rgb(128, 99, 62);
+    border-top-left-radius: $bottle-body-top-radius;
+    border-top-right-radius: $bottle-body-top-radius;
+    border-bottom-left-radius: $bottle-width / 6;
+    border-bottom-right-radius: $bottle-width / 6;
+    background-color: $bottle-body-color;
   }
 
   &__neck {
     position: absolute;
     border: $border;
-    width: $bottle-width /2.5;
-    height: 10px;
+    width: $neck-width;
+    height: $neck-height;
     border-bottom: none;
     left: calc(50% - #{($bottle-width / 2.5) / 2});
-    top: -10px;
-    background-color: rgb(128, 99, 62);
+    bottom: $bottle-body-height - $border-width * 2;
+    background-color: $bottle-body-color;
   }
 
-  &__top {
+  &__cap {
     position: absolute;
     border: $border;
-    border-radius: 5px;
-    width: 14px;
-    height: 12px;
-    left: calc(50% - 7px);
+    border-radius: $border-width * 2;
+    width: $cap-width;
+    height: $cap-height;
+    left: calc(50% - #{$cap-width / 2});
     background-color: rgb(114, 51, 0);
-    top: -17px;
+    bottom: $bottle-body-height;
     z-index: 5;
   }
 
   &__sticker {
     position: absolute;
-    top: 14px; 
-    left: calc(50% - 15px);
+    bottom: calc(50% - #{$bottle-width / 2}); 
+    left: calc(50% - #{$bottle-width / 2});
     z-index: 5;
-    width: 30px;
-    height: 40px;
+    width: $bottle-width;
+    height: $bottle-width;
     border: $border;
     border-radius: 5px;
     background-color: #fff;
@@ -58,14 +68,27 @@ $border: 2px solid #333;
   }
 
   &__label {
-    font-size: 18px;
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 120%;
     font-weight: 900;
     color: #000;
-    line-height: 40px;
-    vertical-align: middle;
+    line-height: $bottle-width;
+    // vertical-align: middle;
     &_small {
-      font-size: 14px;
+      font-size: 100%;
       letter-spacing: -1px;
     }
   }
 }
+
+// @media (min-width: 380px) {
+//   .beer-item__price {
+//     transform: scale(1.2);
+//   }
+// }
+
+// @media (min-width: 420px) {
+//   .beer-item__price {
+//     transform: scale(1.4);
+//   }
+// }

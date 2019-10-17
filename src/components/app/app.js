@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import BeerItem from '../beer-item';
+import BeerList from '../beer-list';
 import CrafterbeerService from '../../service/crafterbeer-service'; 
 import './app.css';
 
@@ -41,9 +41,9 @@ export default class App extends Component {
     }
     return (
       <div className="dev-container">
-        <ul>
-          <BeerItem item={data[2]} />
-        </ul>
+       
+          <BeerList beers={data} />
+        
       </div>
     )
   }

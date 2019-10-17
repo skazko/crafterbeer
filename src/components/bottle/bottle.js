@@ -6,7 +6,7 @@ const Bottle = ({ vol }) => {
     <div className="bottle">
       <div className="bottle__body">
         <div className="bottle__neck"></div>
-        <div className="bottle__top"></div>
+        <div className="bottle__cap"></div>
         <div className="bottle__sticker">
           <span className="bottle__label">{vol}</span>
         </div>    

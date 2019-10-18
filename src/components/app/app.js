@@ -1,50 +1,20 @@
 import React, { Component } from 'react';
 import BeerList from '../beer-list';
 import CrafterbeerService from '../../service/crafterbeer-service'; 
+import ErrorBoundry from '../error-boundry';
 import './app.css';
 
 export default class App extends Component {
+
   state = {
-    data: null,
-    loading: true,
-    error: false
-  }
-
-  api = new CrafterbeerService();
-
-  componentDidMount() {
-    this.api.get()
-      .then((data) => {
-        console.log(data);
-        this.setState({
-          data,
-          loading: false,
-          error: false
-        });
-      })
-      .catch(() => {
-        console.log("Error");
-        this.setState({
-          loading: false,
-          error: true
-        });
-      });
+    api: new CrafterbeerService()
   }
 
   render() {
-    const { loading, error, data } = this.state;
-    if (loading) {
-      return <h1>Loading...</h1>
-    }
-    if (error) {
-      return <h1>Error!!!</h1>
-    }
     return (
-      <div className="dev-container">
-       
-          <BeerList beers={data} />
-        
-      </div>
-    )
+      <ErrorBoundry>
+        <BeerList api={this.state.api} />
+      </ErrorBoundry>
+    );
   }
 }

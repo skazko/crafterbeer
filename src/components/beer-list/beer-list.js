@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import BeerItem from '../beer-item';
+import withBeer from '../hoc/withBeer';
 
 
 const BeerListStyled = styled.ul`
@@ -34,4 +35,4 @@ const BeerList = ({ beers }) => {
   );
 }
 
-export default BeerList;
+export default withBeer(BeerList);

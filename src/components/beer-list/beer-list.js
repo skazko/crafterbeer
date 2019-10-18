@@ -25,11 +25,17 @@ const BeerListStyled = styled.ul`
     max-width: 1596px;
   }
 `
-const BeerList = ({ beers }) => {
+
+// const filterBeer = (beers, filters) => {
+
+// }
+const BeerList = ({ beers, filters }) => {
   return (
     <BeerListStyled>
       {
-        beers.map(beer => <BeerItem key={beer.id} beer={beer}/>)
+        beers
+          .filter((beer) => !filters.styles.includes(beer.style))
+          .map((beer) => <BeerItem key={beer.id} beer={beer}/>)
       }
     </BeerListStyled>
   );

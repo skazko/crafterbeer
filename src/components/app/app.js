@@ -9,14 +9,31 @@ export default class App extends Component {
 
   state = {
     api: new CrafterbeerService(),
-    filters: {styles: ['IPA']}
+    filters: {styles: new Set()}
+  }
+
+  styleButtonHandler = (styleId, isChecked) => {
+    console.log(`${styleId} checked status: ${isChecked}`);
+    if (isChecked) {
+      this.setState((state) => {
+        const newStyles = new Set(state.filters.styles);
+        newStyles.add(styleId);
+        return {...state, filters: {...state.filters, styles: newStyles }};
+      })
+    } else {
+      this.setState((state) => {
+        const newStyles = new Set(state.filters.styles);
+        newStyles.delete(styleId);
+        return {...state, filters: {...state.filters, styles: newStyles }};
+      })
+    }
   }
 
   render() {
     const {api, filters} = this.state;
     return (
       <ErrorBoundry>
-        <Header api={api} />
+        <Header api={api} styleButtonHandler={this.styleButtonHandler} />
         <BeerList api={api} filters={filters} />
       </ErrorBoundry>
     );

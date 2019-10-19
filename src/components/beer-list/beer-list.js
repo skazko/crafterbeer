@@ -34,7 +34,7 @@ const BeerList = ({ beers, filters }) => {
     <BeerListStyled>
       {
         beers
-          .filter((beer) => !filters.styles.includes(beer.style))
+          .filter((beer) => !filters.styles.has(beer.style))
           .map((beer) => <BeerItem key={beer.id} beer={beer}/>)
       }
     </BeerListStyled>

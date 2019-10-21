@@ -14,6 +14,8 @@ const withBeer = (View) => {
     update() {
       this.props.api.get()
         .then((beers) => {
+          console.log(beers);
+          
           this.setState({
             beers,
             loading: false

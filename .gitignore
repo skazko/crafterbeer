@@ -2,3 +2,4 @@
 /build
 crafter.http
 src/service/test-data.js
+src/service/test-images.js

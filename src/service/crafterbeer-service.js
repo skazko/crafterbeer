@@ -1,4 +1,5 @@
 import testData from './test-data';
+import testImages from './test-images';
 import { strip } from '../utils';
 
 export default class CrafterbeerService {
@@ -10,6 +11,23 @@ export default class CrafterbeerService {
         resolve(beerData);
       }, 700);
     });
+  }
+
+  // Пивоварни в свойствах testData не имеют картинок. 
+  // Картинки получаем из категорий (пивоварни) бутылочного пива
+  // в случае совпадения названий. Названия могут незначительно отличаться.
+
+  _getImage = (brewery) => {
+    let breweryImg;
+    const breweryMod = brewery.toLowerCase().replace(/[\s'"`-]|brewery|пивоварня/g, '');
+    const breweries = testImages.map((brewery) => brewery.name.toLowerCase().replace(/[\s'"`-]|brewery|пивоварня/g, ''));
+    const breweryIndex = breweries.findIndex((brewery) => brewery === breweryMod);
+    if (breweryIndex === -1) {
+      breweryImg = null;
+    } else {
+      breweryImg = testImages[breweryIndex].image === null ? null : testImages[breweryIndex].image.src;
+    }
+    return breweryImg;
   }
 
   _transformBeerData = (beerItem) => {
@@ -49,7 +67,7 @@ export default class CrafterbeerService {
     
     const brewery = attributes.find(({ id }) => id === 7).options[0];
     const style = attributes.find(({ id }) => id === 6).options[0];
-
+    const breweryImg = this._getImage(brewery);
     
     //описания на сайте могут содержать теги, а также неактуальные фразы о цене
     const description = strip(short_description)
@@ -69,6 +87,7 @@ export default class CrafterbeerService {
       tth,
       features,
       brewery,
+      breweryImg,
       style
     }
   }

@@ -35,6 +35,7 @@ const BeerList = ({ beers, filters }) => {
       {
         beers
           .filter((beer) => !filters.styles.has(beer.style))
+          .filter((beer) => !filters.breweries.has(beer.brewery))
           .sort((beer1, beer2) => beer1.brewery > beer2.brewery ? 1 : beer1.brewery === beer2.brewery ? 0 : -1)
           .map((beer) => <BeerItem key={beer.id} beer={beer}/>)
       }

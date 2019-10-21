@@ -19,6 +19,7 @@ const withFilters = (View) => {
       this.props.api.get()
         .then((beers) => {
           const styles = new Set(beers.map((beer) => beer.style));
+          const breweries = new Map(beers.map((beer) => [beer.brewery, beer.breweryImg]));
           // const breweries = new Set(beers.map((beer) => beer.brewery));
 
           // const extremums = beers.reduce((findedValues, beer) => {
@@ -39,7 +40,7 @@ const withFilters = (View) => {
           
           const filters = {
             styles,
-            // breweries,
+            breweries,
             // alc: extremums.alc,
             // ibu: extremums.ibu
           }

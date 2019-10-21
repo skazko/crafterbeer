@@ -9,7 +9,7 @@ export default class App extends Component {
 
   state = {
     api: new CrafterbeerService(),
-    filters: {styles: new Set()}
+    filters: {styles: new Set(), breweries: new Set()}
   }
 
   styleButtonHandler = (styleId, isChecked) => {
@@ -29,11 +29,27 @@ export default class App extends Component {
     }
   }
 
+  breweryButtonHandler = (brewery, isChecked) => {
+    console.log(`${brewery} checked status: ${isChecked}`);
+
+    this.setState((state) => {
+      const newBreweryFilter = new Set(state.filters.breweries);
+
+      if (isChecked) {
+        newBreweryFilter.add(brewery);
+      } else {
+        newBreweryFilter.delete(brewery);
+      }
+
+      return {...state, filters: {...state.filters, breweries: newBreweryFilter}}
+    });
+  }
+
   render() {
     const {api, filters} = this.state;
     return (
       <ErrorBoundry>
-        <Header api={api} styleButtonHandler={this.styleButtonHandler} />
+        <Header api={api} styleButtonHandler={this.styleButtonHandler} breweryButtonHandler={this.breweryButtonHandler} />
         <BeerList api={api} filters={filters} />
       </ErrorBoundry>
     );

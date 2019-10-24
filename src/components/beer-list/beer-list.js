@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import BeerItem from '../beer-item';
-import withBeer from '../hoc/withBeer';
-
+import { connect } from 'react-redux';
 
 const BeerListStyled = styled.ul`
   list-style: none;
@@ -26,21 +25,39 @@ const BeerListStyled = styled.ul`
   }
 `
 
-// const filterBeer = (beers, filters) => {
-
-// }
-const BeerList = ({ beers, filters }) => {
+const BeerList = ({ beers }) => {
   return (
     <BeerListStyled>
       {
-        beers
-          .filter((beer) => !filters.styles.has(beer.style))
-          .filter((beer) => !filters.breweries.has(beer.brewery))
-          .sort((beer1, beer2) => beer1.brewery > beer2.brewery ? 1 : beer1.brewery === beer2.brewery ? 0 : -1)
-          .map((beer) => <BeerItem key={beer.id} beer={beer}/>)
+        beers.map((beer) => <BeerItem key={beer.id} beer={beer}/>)
       }
     </BeerListStyled>
   );
 }
 
-export default withBeer(BeerList);
+const BeerListContainer = ({beers, appliedFilters}) => {
+
+  const { needToApply, styles, breweries } = appliedFilters;
+
+    return <BeerList beers={
+      beers
+        .filter((beer) => needToApply.has('styles') ? styles.has(beer.style) : true)
+        .filter((beer) => needToApply.has('breweries') ? breweries.has(beer.brewery) : true)
+        // .filter((beer) => beer.alc >= minAlcApplied && beer.alc <= maxAlcApplied)
+        .sort((beer1, beer2) => beer1.brewery > beer2.brewery ? 1 : beer1.brewery === beer2.brewery ? 0 : -1)
+    } />
+
+}
+
+const mapStateToProps = ({beerList: {beers}, appliedFilters}) => {
+  return {beers, appliedFilters}
+}
+
+// const mapDispatchToProps = (dispatch, { crafterbeerService }) => {
+//   return {
+//     beersFetch: beersFetch(crafterbeerService, dispatch),
+//   }
+// };
+
+
+export default connect(mapStateToProps)(BeerListContainer);

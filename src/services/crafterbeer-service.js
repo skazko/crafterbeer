@@ -65,6 +65,27 @@ export default class CrafterbeerService {
         }
       });
     
+    let alc;
+    if (attributes.findIndex(({ id }) => id === 1) >= 0) {
+      alc = parseFloat(attributes.find(({ id }) => id === 1).options[0].replace(/,/, ".").replace(/[^\d.]/g, ""));
+    } else {
+      alc = null;
+    }
+
+    let og;
+    if (attributes.find(({ id }) => id === 2) >= 0) {
+      og = parseFloat(attributes.find(({ id }) => id === 2).options[0].replace(/,/, ".").replace(/[^\d.]/g, ""));
+    } else {
+      og = null;
+    }
+
+    let ibu;
+    if (attributes.findIndex(({ id }) => id === 3) >= 0) {
+      ibu = parseFloat(attributes.find(({ id }) => id === 3).options[0].replace(/,/, ".").replace(/[^\d.]/g, ""));
+    } else {
+      ibu = null;
+    }
+    
     const brewery = attributes.find(({ id }) => id === 7).options[0];
     const style = attributes.find(({ id }) => id === 6).options[0];
     const breweryImg = this._getImage(brewery);
@@ -88,7 +109,8 @@ export default class CrafterbeerService {
       features,
       brewery,
       breweryImg,
-      style
+      style,
+      alc, og, ibu
     }
   }
 }

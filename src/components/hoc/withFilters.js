@@ -11,38 +11,26 @@ const withFilters = (View) => {
       error: false
     }
 
-    transform(beers) {
-
-    }
-
     update() {
       this.props.api.get()
         .then((beers) => {
           const styles = new Set(beers.map((beer) => beer.style));
           const breweries = new Map(beers.map((beer) => [beer.brewery, beer.breweryImg]));
-          // const breweries = new Set(beers.map((beer) => beer.brewery));
+          const minAlc = beers.reduce((min, beer) => {
+            const alc = beer.features.find(feature => feature.name === 'abv');
+            return alc.value < min ? alc.value : min;
+          }, 100);
 
-          // const extremums = beers.reduce((findedValues, beer) => {
-          //   const features = beer.features;
-          //   const ibu = features.find((feature) => feature.name === 'ibu').value;
-          //   const abv = features.find((feature) => feature.name === 'abv').value;
-          //   return {
-          //     alc: {
-          //       max: Math.max(findedValues.alc.max, abv),
-          //       min: Math.min(findedValues.alc.min, abv)
-          //     },
-          //     ibu: {
-          //       max: Math.max(findedValues.ibu.max, ibu),
-          //       min: Math.min(findedValues.ibu.min, ibu)
-          //     }
-          //   }
-          // },{alc: {min: 10, max: 0}, ibu: {min: 100, max: 0}});
+          const maxAlc = beers.reduce((max, beer) => {
+            const alc = beer.features.find(feature => feature.name === 'abv');
+            return alc.value > max ? alc.value : max;
+          }, 0);
           
           const filters = {
             styles,
             breweries,
-            // alc: extremums.alc,
-            // ibu: extremums.ibu
+            minAlc,
+            maxAlc
           }
 
           this.setState({

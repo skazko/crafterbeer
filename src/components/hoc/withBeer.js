@@ -8,7 +8,7 @@ const withBeer = (View) => {
     state = {
       beers: null,
       loading: true,
-      error: false
+      error: false,
     }
 
     update() {

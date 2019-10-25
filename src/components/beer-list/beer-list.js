@@ -37,13 +37,13 @@ const BeerList = ({ beers }) => {
 
 const BeerListContainer = ({beers, appliedFilters}) => {
 
-  const { needToApply, styles, breweries } = appliedFilters;
+  const { needToApply, styles, breweries, maxAlc, minAlc } = appliedFilters;
 
     return <BeerList beers={
       beers
         .filter((beer) => needToApply.has('styles') ? styles.has(beer.style) : true)
         .filter((beer) => needToApply.has('breweries') ? breweries.has(beer.brewery) : true)
-        // .filter((beer) => beer.alc >= minAlcApplied && beer.alc <= maxAlcApplied)
+        .filter((beer) => beer.alc >= minAlc && beer.alc <= maxAlc)
         .sort((beer1, beer2) => beer1.brewery > beer2.brewery ? 1 : beer1.brewery === beer2.brewery ? 0 : -1)
     } />
 

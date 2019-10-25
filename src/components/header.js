@@ -1,20 +1,21 @@
 import React, { Fragment, Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { updateStyleFilter, updateBreweryFilter } from '../actions';
+import { updateStyleFilter, updateBreweryFilter,
+  updateAlcFilter } from '../actions';
 
 const HeaderStyled = styled.header`
-width: 100%;
-`;
+  width: 100%;`;
+
 const HeaderLogo = styled.img``;
 const HeaderFilters = styled.ul`
   margin: 0;
   padding: 20px;
-  list-style: none;
-`;
+  list-style: none;`;
+
 const HeaderFilter = styled.li`
-margin-bottom: 20px;
-`;
+margin-bottom: 20px;`;
+
 const FilterCheckbox = styled.input`
   position: absolute;
   width: 1px;
@@ -28,25 +29,22 @@ const FilterCheckbox = styled.input`
   :checked + label {
     background-color: yellow;
   }
+
   :focus + label {
     outline: rgb(59, 153, 252) auto 5px;
-  }
-  `;
+  }`;
 
 const BreweryCheckbox = styled(FilterCheckbox)`
   :checked + label {
     background-color: #f5f5f5;
-
-  }
-`;
+  }`;
 
 const FilterButton = styled.label`
   padding: 5px;
   cursor: pointer;
   border: 1px solid grey;
   display: inline-block;
-  margin: 0 10px 10px 0;
-`;
+  margin: 0 10px 10px 0;`;
 
 const crafterbeerLogo = "https://crafterbeer.ru/wp-content/uploads/2019/02/logo-crafter-small-1.png";
 
@@ -68,17 +66,13 @@ const BreweryLabel = styled(FilterButton)`
     background-repeat: no-repeat;
     background-position: center center;
     background-image: url('${props => props.breweryImg || crafterbeerLogo }');
-  }
-`;
+  }`;
 
 const BreweryName = styled.span`
   margin-left: 10px;
-  flex-grow: 1;
-`;
+  flex-grow: 1;`;
 
-const BreweryBeersQuantity = styled.span`
-  
-`;
+const BreweryBeersQuantity = styled.span``;
 
 const FilterSlider = styled.div`
   border-radius: 5px;
@@ -87,7 +81,12 @@ const FilterSlider = styled.div`
   width: 100%;
   height: 10px;
   position: relative;
-`;
+  z-index: 1;`;
+
+const SliderActiveRange = styled(FilterSlider)`
+  position: absolute;
+  background-color: blue;
+  z-index: 5;`;
 
 const SliderThumb = styled.div`
   width: 20px;
@@ -95,14 +94,9 @@ const SliderThumb = styled.div`
   border-radius: 50%;
   position: absolute;
   top: -5px;
-  /* left: ${props => props.startX}px; */
   background: blue;
   cursor: pointer;
-  ${prop => prop.left}
-`;
-
-// const MinAlcThumb = styled(SliderThumb)`left: 0;`
-// const MaxAlcThumb = styled(SliderThumb)`right: 0;`
+  z-index: 10;`;
 
 const AlcInput = styled.input.attrs((props) => ({
   type: "number",
@@ -111,26 +105,20 @@ const AlcInput = styled.input.attrs((props) => ({
   max: props.max,
   min: props.min
 }))`
-margin: 15px;
-flex: 1;
-padding: 5px;
--moz-appearance: textfield;
-:hover,
-:focus {
-  -moz-appearance: number-input;
-}
+  margin: 15px;
+  flex: 1;
+  padding: 5px;
+  -moz-appearance: textfield;
 
-::-webkit-outer-spin-button,
-::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+  :hover, :focus {
+    -moz-appearance: number-input;
+  }
 
-
-
-`;
-
-
+  ::-webkit-outer-spin-button,
+  ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }`;
 
 class AlcoFilter extends Component {
   state = {
@@ -145,19 +133,21 @@ class AlcoFilter extends Component {
     maxX: null,
   }
 
-  minTimer = null;
-  maxTimer = null;
-
   updateSliderSize = () => {
     const slider = document.getElementById('slider-alc');
     const thumb = slider.querySelector('div');
     
-    this.setState({
-      sliderLength: slider.offsetWidth,
-      sliderLeft: slider.getBoundingClientRect().left,
-      thumbWidth: thumb.offsetWidth,
-      maxX: slider.offsetWidth - thumb.offsetWidth,
-      xToAlc: (this.props.maxAlc - this.props.minAlc) / (slider.offsetWidth - 2 * thumb.offsetWidth)
+    this.setState((state) => {
+      const {minAlc, maxAlc} = state;
+      const newXToAlc = (this.props.maxAlc - this.props.minAlc) / (slider.offsetWidth - 2 * thumb.offsetWidth);
+      return {
+        sliderLength: slider.offsetWidth,
+        sliderLeft: slider.getBoundingClientRect().left,
+        thumbWidth: thumb.offsetWidth,
+        maxX: (maxAlc - this.props.minAlc) / newXToAlc + thumb.offsetWidth,
+        minX: (minAlc - this.props.minAlc ) / newXToAlc,
+        xToAlc: newXToAlc
+      }
     });
   }
 
@@ -170,18 +160,46 @@ class AlcoFilter extends Component {
     window.removeEventListener('resize', this.updateSliderSize);
   }
 
-  thumbMoveHandler = (extremumAlc, sideEdge, shiftX, thumb) => (e) => {
+  getClientX = (e) => {
+    if (e instanceof MouseEvent) {
+      return e.clientX;
+    }
+    if (e instanceof TouchEvent) {
+      return e.changedTouches[0].clientX;
+    }
+  }
 
+  getMoveEventName = (e) => {
+
+    if (e instanceof MouseEvent) {
+      return 'mousemove';
+    }
+    if (e instanceof TouchEvent) {
+      
+      return 'touchmove';
+    }
+  }
+  
+  getMoveEndEventName = (e) => {
+    if (e instanceof MouseEvent) {
+      return 'mouseup';
+    }
+    if (e instanceof TouchEvent) {
+      return 'touchend';
+    }
+  }
+
+  thumbMoveHandler = (extremumAlc, sideEdge, shiftX) => (e) => {    
     const { sliderLength, sliderLeft, rightMin, leftMax, xToAlc, thumbWidth } = this.state;
-    let newX = e.clientX - shiftX - sliderLeft;
-
+    const xPosition = extremumAlc === 'minAlc' ? 'minX' : 'maxX';
     const leftEdge = extremumAlc === 'minAlc' ? 0 : rightMin;
+    let newX = this.getClientX(e) - shiftX - sliderLeft;
+    let rightEdge;
 
     if (newX < leftEdge) {
       newX = leftEdge;
     }
 
-    let rightEdge;
     if (extremumAlc === 'minAlc') {
       rightEdge = sliderLength - thumbWidth - leftMax;
     } else {
@@ -191,14 +209,13 @@ class AlcoFilter extends Component {
     if (newX > rightEdge) {
       newX = rightEdge;
     }
-
-    const xPosition = extremumAlc === 'minAlc' ? 'minX' : 'maxX';
+    
     let alc = this.props.minAlc + Math.round(newX * xToAlc * 10) / 10;
     if (alc > this.props.maxAlc) {
       alc = this.props.maxAlc;
     }
     const edgeValue = extremumAlc === 'minAlc' ? newX + thumbWidth : sliderLength - newX;
-  
+   
     this.setState({
       [extremumAlc]: alc,
       [sideEdge]: edgeValue,
@@ -207,31 +224,40 @@ class AlcoFilter extends Component {
   }
 
   alcHandler = (extremumAlc, sideEdge) => (e) => {
-    e.preventDefault();
-    const thumb = e.target;
-    const shiftX = e.clientX - thumb.getBoundingClientRect().left;
-    const thumbMoveHandler = this.thumbMoveHandler(extremumAlc, sideEdge, shiftX, thumb);
-
-    document.addEventListener('mousemove', thumbMoveHandler);
-    document.addEventListener('mouseup', onMouseUp);
-  
-    function onMouseUp() {
-      document.removeEventListener('mouseup', onMouseUp);
-      document.removeEventListener('mousemove', thumbMoveHandler);
+    const onMoveEnd = () => {
+      this.props.updateAlcFilter({...this.state});
+      document.removeEventListener(MOVE_END_EVENT_NAME, onMoveEnd);
+      document.removeEventListener(MOVE_EVENT_NAME, thumbMoveHandler);
     }
 
+    e.preventDefault();
+
+    const MOVE_EVENT_NAME = this.getMoveEventName(e.nativeEvent);
+    const MOVE_END_EVENT_NAME = this.getMoveEndEventName(e.nativeEvent);
+    const thumb = e.target;
+    const shiftX = this.getClientX(e.nativeEvent) - thumb.getBoundingClientRect().left;
+    const thumbMoveHandler = this.thumbMoveHandler(extremumAlc, sideEdge, shiftX);
+
+    document.addEventListener(MOVE_EVENT_NAME, thumbMoveHandler);
+    document.addEventListener(MOVE_END_EVENT_NAME, onMoveEnd);
   }
 
   minAlcHandler = this.alcHandler('minAlc', 'rightMin');
   maxAlcHandler = this.alcHandler('maxAlc', 'leftMax');
 
-  checkAlcValue = (alc) => () => {
+  checkAlcValue = (alc) => (e) => {
+    if (e.nativeEvent instanceof KeyboardEvent) {
+      if (e.keyCode !== 13) {
+        return;
+      }
+    }
 
     this.setState((state) => {
       
       let floated = isNaN(parseFloat(state[alc])) ? this.props[alc] : parseFloat(state[alc]);
       const contrAlc = alc === 'minAlc' ? 'maxAlc' : 'minAlc';
       const xPos = alc === 'minAlc' ? 'minX' : 'maxX'; 
+      let newXPos;
 
       if (alc === 'minAlc') {
         
@@ -242,7 +268,8 @@ class AlcoFilter extends Component {
         if (floated > state[contrAlc]) {
           floated = state[contrAlc];
         }
-
+        newXPos = (floated - this.props.minAlc) / this.state.xToAlc;
+        
       }
       
       if (alc === 'maxAlc') {
@@ -254,15 +281,18 @@ class AlcoFilter extends Component {
         if (floated < state[contrAlc]) {
           floated = state[contrAlc]
         }
-
+        newXPos = (floated - this.props.minAlc) / this.state.xToAlc + state.thumbWidth;
       }
+
+      this.props.updateAlcFilter({...state, [alc]: floated});
 
       return {
         [alc]: floated,
-        [xPos]: (floated - this.props.minAlc) / this.state.xToAlc
+        [xPos]: newXPos
       }
       
-    })
+    });
+
   }
 
   alcInputHandler = (alc) => (e) => {
@@ -278,35 +308,34 @@ class AlcoFilter extends Component {
     return (
       <div>
         <FilterSlider id="slider-alc">
+          
           <SliderThumb 
-            left={`left: ${this.state.minX}px`}
-            onMouseDown={(e) => this.minAlcHandler(e)}/>
+            style={{left: `${this.state.minX}px`}}
+            onMouseDown={this.minAlcHandler}
+            onTouchStart={this.minAlcHandler}/>
           <SliderThumb
-            left={`left: ${this.state.maxX}px`} 
-            onMouseDown={(e) => this.maxAlcHandler(e)}/>
+            style={{left: `${this.state.maxX}px`}}
+            onMouseDown={this.maxAlcHandler}
+            onTouchStart={this.maxAlcHandler}/>
+          <SliderActiveRange style={{
+            left: `${this.state.minX + this.state.thumbWidth / 2}px`,
+            width: `${this.state.maxX - this.state.minX}px`
+          }}/>
         </FilterSlider>
-        <div style={{display: 'flex'}}>
-          <AlcInput value={minAlc} 
-                    min={this.props.minAlc} 
-                    max={maxAlc}
+        <div style={{ display: 'flex' }}>
+          <AlcInput value={ minAlc } 
+                    min={ this.props.minAlc } 
+                    max={ maxAlc }
                     onChange={ this.alcInputHandler('minAlc') }
-                    onBlur={ this.checkAlcValue('minAlc')}
-                    onKeyUp={(e) => {
-                      if (e.keyCode === 13) {
-                        this.checkAlcValue('minAlc')(e)
-                      }
-                    }}
+                    onBlur={ this.checkAlcValue('minAlc') }
+                    onKeyUp={ this.checkAlcValue('minAlc') }
                     id="min-alc"/>
-          <AlcInput value={maxAlc } 
-                    min={minAlc} 
-                    max={this.props.maxAlc} 
+          <AlcInput value={ maxAlc } 
+                    min={ minAlc } 
+                    max={ this.props.maxAlc } 
                     onChange={ this.alcInputHandler('maxAlc') }
                     onBlur={ this.checkAlcValue('maxAlc') } 
-                    onKeyUp={(e) => {
-                      if (e.keyCode === 13) {
-                        this.checkAlcValue('maxAlc')(e)
-                      }
-                    }}
+                    onKeyUp={ this.checkAlcValue('maxAlc') }
                     id="max-alc"/>
         </div>
         
@@ -316,8 +345,7 @@ class AlcoFilter extends Component {
   }
 }
 
-// const Header = ({ appliedFilters, filters, styleButtonHandler, breweryButtonHandler, sliderHandler, sliderTouchHandler, minHandler, maxHandler }) => {
-const Header = ({ filters, updateStyleFilter, updateBreweryFilter }) => {
+const Header = ({ filters, updateStyleFilter, updateBreweryFilter, updateAlcFilter }) => {
   const styles = [...filters.styles];  
   const breweries = [...filters.breweries];
   const { minAlc, maxAlc } = filters;
@@ -327,9 +355,7 @@ const Header = ({ filters, updateStyleFilter, updateBreweryFilter }) => {
       <HeaderLogo></HeaderLogo>
       <HeaderFilters>
         <HeaderFilter>
-          <AlcoFilter maxAlc={maxAlc} minAlc={minAlc} />
-          
-          
+          <AlcoFilter maxAlc={maxAlc} minAlc={minAlc} updateAlcFilter={updateAlcFilter}/>
         </HeaderFilter>
 
         <HeaderFilter id="style-filter" hidden>
@@ -370,7 +396,7 @@ const Header = ({ filters, updateStyleFilter, updateBreweryFilter }) => {
   );
 }
 
-const HeaderContainer = ({ beers, updateStyleFilter, updateBreweryFilter }) => {
+const HeaderContainer = ({ beers, updateStyleFilter, updateBreweryFilter, updateAlcFilter }) => {
 
   const styles = new Map();
   beers.forEach((beer) => {
@@ -410,11 +436,12 @@ const HeaderContainer = ({ beers, updateStyleFilter, updateBreweryFilter }) => {
     breweries,
     minAlc,
     maxAlc
-  }
+  };
       
   return <Header filters={filters} 
                  updateStyleFilter={updateStyleFilter} 
-                 updateBreweryFilter={updateBreweryFilter}/>
+                 updateBreweryFilter={updateBreweryFilter}
+                 updateAlcFilter={updateAlcFilter}/>;
 }
 
 const mapStateToProps = ({beerList: {beers}}) => {
@@ -424,7 +451,8 @@ const mapStateToProps = ({beerList: {beers}}) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateStyleFilter: (style, isChecked) => dispatch(updateStyleFilter(style, isChecked)),
-    updateBreweryFilter: (brewery, isChecked) => dispatch(updateBreweryFilter(brewery, isChecked))      
+    updateBreweryFilter: (brewery, isChecked) => dispatch(updateBreweryFilter(brewery, isChecked)),
+    updateAlcFilter: (maxAlc, minAlc) => dispatch(updateAlcFilter(maxAlc, minAlc))      
   }
 }
 

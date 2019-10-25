@@ -73,22 +73,9 @@ $cap-height: $neck-width;
     font-weight: 900;
     color: #000;
     line-height: $bottle-width;
-    // vertical-align: middle;
     &_small {
       font-size: 100%;
       letter-spacing: -1px;
     }
   }
 }
-
-// @media (min-width: 380px) {
-//   .beer-item__price {
-//     transform: scale(1.2);
-//   }
-// }
-
-// @media (min-width: 420px) {
-//   .beer-item__price {
-//     transform: scale(1.4);
-//   }
-// }

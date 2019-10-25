@@ -26,8 +26,6 @@ const beersFetch = (crafterbeerService, dispatch) => () => {
 }
 
 const updateStyleFilter = (style, isChecked) => {
-  console.log(style, isChecked);
-  
   return {
     type: 'UPDATE_STYLE_FILTER',
     payload: {item: style, isChecked}
@@ -35,20 +33,22 @@ const updateStyleFilter = (style, isChecked) => {
 }
 
 const updateBreweryFilter = (brewery, isChecked) => {
-  console.log(brewery, isChecked);
-  
   return {
     type: 'UPDATE_BREWERY_FILTER',
     payload: {item: brewery, isChecked}
   }
 }
 
-
-
-
+const updateAlcFilter = ({maxAlc, minAlc}) => {
+  return {
+    type: 'UPDATE_ALC_FILTER',
+    payload: {maxAlc, minAlc}
+  }
+}
 
 export {
   beersFetch,
   updateStyleFilter,
-  updateBreweryFilter
+  updateBreweryFilter,
+  updateAlcFilter,
 }

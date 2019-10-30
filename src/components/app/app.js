@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import BeerList from '../beer-list';
-import Header from '../header';
+import HeaderContainer from '../header-container';
 import './app.css';
 import { connect } from 'react-redux';
 import { compose } from '../../utils';
@@ -15,7 +15,7 @@ class App extends Component {
   render() {
     return (
       <Fragment>
-        <Header />
+        <HeaderContainer />
         <BeerList />
       </Fragment>
     );

@@ -1,0 +1,12 @@
+.filter-container {
+  position: relative;
+}
+
+.filter-container__button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+}

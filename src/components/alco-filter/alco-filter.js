@@ -48,8 +48,8 @@ const AlcInput = styled.input.attrs((props) => ({
 
 class AlcoFilter extends Component {
   state = {
-    maxAlc: this.props.maxAlc,
-    minAlc: this.props.minAlc,
+    maxAlc: Math.min(this.props.maxAlc, this.props.appliedAlc.max),
+    minAlc: Math.max(this.props.minAlc, this.props.appliedAlc.min),
     leftMax: null,
     rightMin: null,
     sliderLength: null,
@@ -66,6 +66,7 @@ class AlcoFilter extends Component {
     this.setState((state) => {
       const {minAlc, maxAlc} = state;
       const newXToAlc = (this.props.maxAlc - this.props.minAlc) / (slider.offsetWidth - 2 * thumb.offsetWidth);
+      
       return {
         sliderLength: slider.offsetWidth,
         sliderLeft: slider.getBoundingClientRect().left,
@@ -226,37 +227,39 @@ class AlcoFilter extends Component {
   }
 
   render() {
-    const {maxAlc, minAlc} = this.state;
+    const { maxAlc, minAlc, minX, maxX, thumbWidth } = this.state;
     return (
       <div style={{ padding: '10px' }}>
         <FilterSlider id="slider-alc">
           <SliderThumb 
-            style={{left: `${this.state.minX}px`}}
+            style={{left: `${minX}px`}}
             onMouseDown={this.minAlcHandler}
             onTouchStart={this.minAlcHandler}/>
           <SliderThumb
-            style={{left: `${this.state.maxX}px`}}
+            style={{left: `${maxX}px`}}
             onMouseDown={this.maxAlcHandler}
             onTouchStart={this.maxAlcHandler}/>
           <SliderActiveRange style={{
-            left: `${this.state.minX + this.state.thumbWidth / 2}px`,
-            width: `${this.state.maxX - this.state.minX}px`
+            left: `${minX + thumbWidth / 2}px`,
+            width: `${maxX - minX}px`
           }}/>
         </FilterSlider>
         
         <div style={{ display: 'flex' }}>
-          <AlcInput value={ minAlc } 
-                    min={ this.props.minAlc } 
-                    max={ maxAlc }
-                    onChange={ this.alcInputHandler('minAlc') }
-                    onBlur={ this.checkAlcValue('minAlc') }
-                    onKeyUp={ this.checkAlcValue('minAlc') }/>
-          <AlcInput value={ maxAlc } 
-                    min={ minAlc } 
-                    max={ this.props.maxAlc } 
-                    onChange={ this.alcInputHandler('maxAlc') }
-                    onBlur={ this.checkAlcValue('maxAlc') } 
-                    onKeyUp={ this.checkAlcValue('maxAlc') }/>
+          <AlcInput 
+            value={ minAlc } 
+            min={ this.props.minAlc } 
+            max={ maxAlc }
+            onChange={ this.alcInputHandler('minAlc') }
+            onBlur={ this.checkAlcValue('minAlc') }
+            onKeyUp={ this.checkAlcValue('minAlc') }/>
+          <AlcInput 
+            value={ maxAlc } 
+            min={ minAlc } 
+            max={ this.props.maxAlc } 
+            onChange={ this.alcInputHandler('maxAlc') }
+            onBlur={ this.checkAlcValue('maxAlc') } 
+            onKeyUp={ this.checkAlcValue('maxAlc') }/>
         </div>
         
       </div>

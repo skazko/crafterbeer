@@ -11,7 +11,7 @@ const BeerListStyled = styled.ul`
   display: flex;
   flex-wrap: wrap;
   max-width: 400px;
-  background-color: #f3d654;
+  /* background-color: #f3d654; */
   @media (min-width: 800px) {
    max-width: 800px;
   }

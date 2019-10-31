@@ -39,10 +39,6 @@ export default class FilterContainer extends Component {
     const currentTarget = e.target;
     const outContains = !filterContainer.contains(currentTarget);
     const outEq = filterContainer !== currentTarget;
-
-    console.log(filterContainer.contains(currentTarget));
-    console.log(filterContainer === currentTarget)
-    
     
     if (outContains && outEq) {
       this.hide();

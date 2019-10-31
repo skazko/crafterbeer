@@ -14,21 +14,32 @@ const StyleCheckbox = styled(FilterCheckbox)`
   :focus + label {
     outline: rgb(59, 153, 252) auto 5px;
   }
+
+  :disabled + label {
+    opacity: 0.3;
+  }
 `;
 
 const StyleFilter = ({styles, updateStyleFilter}) => {
 
-  const stylesItems = styles.map((style) => (
-      <StyleListItem key={style[0]}>
+  const stylesItems = styles.map((style) => {
+    const styleName = style[0];
+    const { quantity, isChecked } = style[1];
+    const filterId = `${styleName.replace(/\s/g, '')}Filter`;
+    return (
+      <StyleListItem key={styleName}>
         <StyleCheckbox
-          onChange={(e) => updateStyleFilter(style[0], e.target.checked)} 
-          id={`${style[0].replace(/\s/g, '')}Filter`} 
-          type="checkbox" />
-        <FilterButton htmlFor={`${style[0].replace(/\s/g, '')}Filter`}>
-          {style[0]}<span> - {style[1]}</span>
+          onChange={(e) => updateStyleFilter(styleName, e.target.checked)} 
+          id={filterId} 
+          type="checkbox"
+          checked={isChecked}
+          disabled={quantity === 0} />
+        <FilterButton htmlFor={filterId}>
+          {styleName}<span> - {quantity}</span>
         </FilterButton>
       </StyleListItem>
-    ) );
+    )
+  });
 
   return <FilterList>{stylesItems}</FilterList>;
 }

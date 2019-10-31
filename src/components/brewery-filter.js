@@ -19,7 +19,7 @@ const BreweryBeersQuantity = styled.span`
 const BreweryLabel = styled(FilterButton)`
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: 5px 1.5rem;
   border-width: 0;
   margin: 0;
 
@@ -39,32 +39,41 @@ const BreweryLabel = styled(FilterButton)`
 
 const BreweryCheckbox = styled(FilterCheckbox)`
   :checked + label {
-    background-color: #f5f5f5;
+    background-color: #d5d5d5;
   }
 
   & + label:hover {
-    background-color: #d5d5d5;
+    background-color: #c5c5c5;
   }
 
-  :checked + label:hover {
-    background-color: #d5d5d5;
+  :disabled + label {
+    opacity: 0.3;
   }
 `;
 
 const BreweryFilter = ({ breweries, updateBreweryFilter }) => {
 
-  const breweriesItems = breweries.map((brewery) => (
-    <BreweryListItem key={brewery[0]}>
-      <BreweryCheckbox 
-        onChange={(e) => updateBreweryFilter(brewery[0], e.target.checked)}
-        id={`${brewery[0].replace(/[\s'"`-]/g, '')}Filter`} 
-        type="checkbox" />
-      <BreweryLabel htmlFor={`${brewery[0].replace(/[\s'"`-]/g, '')}Filter`} breweryImg={brewery[1].img} >
-        <BreweryName>{brewery[0]}</BreweryName>
-        <BreweryBeersQuantity>{brewery[1].quantity}</BreweryBeersQuantity>
-      </BreweryLabel>
-    </BreweryListItem>
-  ) );
+  const breweriesItems = breweries.map((brewery) => {
+    
+    const [name, props] = brewery;
+    const { isChecked, quantity, img } = props; 
+    const id = `${name.replace(/[\s'"`-]/g, '')}Filter`; 
+
+    return (
+      <BreweryListItem key={name}>
+        <BreweryCheckbox 
+          onChange={(e) => updateBreweryFilter(name, e.target.checked)}
+          id={id} 
+          type="checkbox"
+          checked={isChecked} 
+          disabled={quantity === 0}/>
+        <BreweryLabel htmlFor={id} breweryImg={img} >
+          <BreweryName>{name}</BreweryName>
+          <BreweryBeersQuantity>{quantity}</BreweryBeersQuantity>
+        </BreweryLabel>
+      </BreweryListItem>
+    )
+  });
 
   return <FilterList>{breweriesItems}</FilterList>;
 }

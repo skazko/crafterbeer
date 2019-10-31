@@ -123,9 +123,39 @@ const compose = (...funcs) => (comp) => {
   return funcs.reduceRight((wrapped, f) => f(wrapped), comp);
 }; 
 
+const applyAlcFilter = (beers, {maxAlc, minAlc}) => {
+  return beers.filter((beer) => beer.alc >= minAlc && beer.alc <= maxAlc);
+};
+
+const applyBreweryFilter = (beers, {needToApply, breweries}) => {
+  if (needToApply.has('breweries')) {
+    return beers.filter((beer) => breweries.has(beer.brewery))
+  } 
+  return beers; 
+};
+
+const applyStyleFilter = (beers, {needToApply, styles}) => {
+  if (needToApply.has('styles')) {
+    return beers.filter((beer) => styles.has(beer.style))
+  }
+  return beers;
+};
+
+const filterBeers = (beers, appliedFilters) => {
+  const { needToApply, styles, breweries, maxAlc, minAlc } = appliedFilters;
+  return beers
+          .filter((beer) => needToApply.has('styles') ? styles.has(beer.style) : true)
+          .filter((beer) => needToApply.has('breweries') ? breweries.has(beer.brewery) : true)
+          .filter((beer) => beer.alc >= minAlc && beer.alc <= maxAlc)
+} 
+
 
 export {
   strip,
   beergroundColor,
-  compose
+  compose,
+  filterBeers,
+  applyAlcFilter,
+  applyBreweryFilter,
+  applyStyleFilter
 }

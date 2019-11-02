@@ -1,0 +1,25 @@
+.filter-container-mobile {
+  border-bottom: 1px solid #cccccc;
+}
+
+.filter-container-mobile__btn {
+  width: 100%;
+  background-color: transparent;
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 1rem;
+  display: flex;
+}
+
+.filter-container-mobile__name {
+  line-height: 2rem;
+  padding-left: 1rem;
+}
+
+.filter-container-mobile__icon {
+  line-height: 2rem;
+}
+
+.filter-container-mobile__content {
+  padding: 0rem 1rem;
+}

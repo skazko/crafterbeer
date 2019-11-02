@@ -43,6 +43,15 @@ const updateAppliedFilters = (state, action) => {
     case 'UPDATE_ALC_FILTER':
       return {...state.appliedFilters, maxAlc: action.payload.maxAlc, minAlc: action.payload.minAlc}
 
+    case 'CLEAR_FILTERS':
+      return {
+        needToApply: new Set(),
+        styles: new Set(),
+        breweries: new Set(),
+        maxAlc: 100,
+        minAlc: 0
+      }
+
     default: 
       return state.appliedFilters;
   }

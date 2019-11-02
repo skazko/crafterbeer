@@ -4,6 +4,7 @@ import { updateStyleFilter, updateBreweryFilter, updateAlcFilter } from '../acti
 import { applyAlcFilter, applyBreweryFilter, applyStyleFilter } from './../utils';
 
 import Header from './header';
+import MobileHeader from './mobile-header/mobile-header';
 
 const calculateQuantity = (filterMap, filter) => {
   let count;
@@ -97,13 +98,16 @@ const HeaderContainer = ({ beers, updateStyleFilter, updateBreweryFilter, update
     maxAlc
   };
       
-  return <Header 
-            filters={filters} 
-            updateStyleFilter={updateStyleFilter} 
-            updateBreweryFilter={updateBreweryFilter}
-            updateAlcFilter={updateAlcFilter}
-            appliedAlc = {appliedAlc}
-          />;
+  return (
+    <div className="header">
+      <Header filters={filters} updateStyleFilter={updateStyleFilter} 
+            updateBreweryFilter={updateBreweryFilter} updateAlcFilter={updateAlcFilter}
+            appliedAlc = {appliedAlc} />
+      <MobileHeader filters={filters} updateStyleFilter={updateStyleFilter} 
+            updateBreweryFilter={updateBreweryFilter} updateAlcFilter={updateAlcFilter}
+            appliedAlc = {appliedAlc}/>
+    </div>
+  );
 }
 
 const mapStateToProps = ({beerList: {beers}, appliedFilters}) => {

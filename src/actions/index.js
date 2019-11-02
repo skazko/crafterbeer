@@ -46,9 +46,16 @@ const updateAlcFilter = ({maxAlc, minAlc}) => {
   }
 }
 
+const clearFilters = () => {
+  return {
+    type: 'CLEAR_FILTERS'
+  }
+}
+
 export {
   beersFetch,
   updateStyleFilter,
   updateBreweryFilter,
   updateAlcFilter,
+  clearFilters
 }

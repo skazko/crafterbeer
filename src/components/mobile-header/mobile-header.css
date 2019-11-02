@@ -1,0 +1,41 @@
+.mobile-header {
+  padding: 4px;
+  padding-bottom: 0;
+}
+
+.mobile-header__buttons {
+  display: flex;
+  justify-content: center;
+  margin-right: -2px;
+  margin-left: -2px;
+}
+
+.mobile-header__btn {
+  background-color: transparent;
+  padding: 0.5rem 1rem;
+  border: 2px solid #000000;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  margin-right: 2px;
+  margin-left: 2px;
+  flex-grow: 1;
+  justify-content: center;
+  flex-basis: 50%;
+}
+
+.mobile-header__btn-title {
+  font-size: 1rem;
+  font-weight: 700;
+  padding-right: 0.5rem;
+}
+
+
+
+
+
+@media (min-width: 768px) {
+  .mobile-header {
+    display: none;
+  }
+}

@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { clearFilters } from '../../actions';
 import { filterBeers } from '../../utils';
-
+import MobilePopupHeader from '../mobile-popup-header';
 import './mobile-filters.css';
 
 import AlcoFilter from '../alco-filter';
@@ -11,21 +11,23 @@ import BreweryFilter from '../brewery-filter';
 import MobileFilterContainer from '../mobile-filter-container';
 
 const MobileFilters = ({clearFilters, isOpen, closeHandler, filters, beers, appliedFilters, updateStyleFilter, updateAlcFilter, updateBreweryFilter, appliedAlc}) => {
-  const openMod = isOpen ? 'filter-popup_open' : '';
+  const openFilter = isOpen ? 'filter-popup_open' : '';
   const styles = [...filters.styles];  
   const breweries = [...filters.breweries];
   const { minAlc, maxAlc } = filters;
   const filteredQuantity = filterBeers(beers, appliedFilters).length;
   const isFiltered = filteredQuantity < beers.length;
-  const confirmColor = isFiltered ? {backgroundColor: '#217742', color: '#ffffff'} : {};
+  const confirmColors = isFiltered ? {'--confirm-bgcolor': '#217742', '--confirm-color': '#ffffff'} : {};
+  const showClear = isFiltered ? {'--clear': 'block'} : {};
   return (
-    <div className={`filter-popup ${openMod}`}>
+    <div className={`filter-popup ${openFilter}`}>
       <div className="filter-popup__content">
-        <div className="filter-popup__header">
-          <h3 className="filter-popup__title">Фильтр</h3>
-          <button onClick={clearFilters} className="filter-popup__clear-filter">Очистить фильтр</button>
-          <button onClick={closeHandler} className="filter-popup__close">&times;</button>
-        </div>
+        <MobilePopupHeader 
+          clearFilters={clearFilters} 
+          showClear={showClear} 
+          closeHandler={closeHandler} 
+          popupName="Фильтр"
+        />
         <div className="filter-popup__filters-container">
           <MobileFilterContainer name="Алкоголь">
             <AlcoFilter maxAlc={maxAlc} minAlc={minAlc} updateAlcFilter={updateAlcFilter} appliedAlc={appliedAlc}/>
@@ -38,7 +40,7 @@ const MobileFilters = ({clearFilters, isOpen, closeHandler, filters, beers, appl
           </MobileFilterContainer>
         </div>
       </div>
-      <button onClick={closeHandler} className="filter-popup__confirm" style={confirmColor}>Показать {filteredQuantity} сорт(ов)</button>
+      <button onClick={closeHandler} className="filter-popup__confirm" style={confirmColors}>Показать {filteredQuantity} сорт(ов)</button>
     </div>
   );
 }

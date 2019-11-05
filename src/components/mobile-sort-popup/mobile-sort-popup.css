@@ -1,0 +1,16 @@
+
+.mobile-sort-popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 1000;
+  overflow: scroll;
+  background-color: #ffffff;
+}
+
+.mobile-sort-popup_open {
+  display: block;
+}

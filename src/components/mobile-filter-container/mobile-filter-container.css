@@ -9,15 +9,15 @@
   font-weight: 700;
   padding: 1rem;
   display: flex;
+  align-items: center;
+}
+
+.filter-container-mobile__btn svg {
+  transition: transform 0.2s;
 }
 
 .filter-container-mobile__name {
-  line-height: 2rem;
   padding-left: 1rem;
-}
-
-.filter-container-mobile__icon {
-  line-height: 2rem;
 }
 
 .filter-container-mobile__content {

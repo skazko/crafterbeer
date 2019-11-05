@@ -13,9 +13,6 @@ const updateAppliedFilters = (state, action) => {
     const { appliedFilters } = state;
     const { item, isChecked } = action.payload;
     const filterToUpdate = new Set(appliedFilters[filter]);
-
-    console.log('appliedFilters[filter]: ' + appliedFilters[filter] );
-    
     const needToApply = new Set(appliedFilters.needToApply);
 
     if (isChecked) {

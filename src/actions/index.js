@@ -52,10 +52,20 @@ const clearFilters = () => {
   }
 }
 
+const sortBeersHandler = (sortOption) => {
+  console.log('sort action');
+  
+  return {
+    type: 'SORT_BEERS',
+    payload: sortOption
+  }
+}
+
 export {
   beersFetch,
   updateStyleFilter,
   updateBreweryFilter,
   updateAlcFilter,
-  clearFilters
+  clearFilters,
+  sortBeersHandler
 }

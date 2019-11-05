@@ -36,17 +36,35 @@ const BeerList = ({ beers }) => {
   );
 }
 
-const BeerListContainer = ({beers, appliedFilters}) => {
+const BeerListContainer = ({beers, appliedFilters, sortingOption}) => {
+
+    const sortByBreweryAsc = (a, b) => a.brewery > b.brewery ? 1 : a.brewery === b.brewery ? 0 : -1;
+    const sortByBreweryDesc = (a, b) => a.brewery < b.brewery ? 1 : a.brewery === b.brewery ? 0 : -1;
+    const sortByAlcAsc = (a, b) => a.alc > b.alc ? 1 : a.alc === b.alc ? 0 : -1;
+    const sortByAlcDesc = (a, b) => a.alc < b.alc ? 1 : a.alc === b.alc ? 0 : -1;
+
+    const sortBeers = (sortingOption) => {
+      switch (sortingOption) {
+        case 'alcoAsc': 
+          return sortByAlcAsc;
+        case 'breweryAsc': 
+          return sortByBreweryAsc;
+        case 'alcoDesc':
+          return sortByAlcDesc;
+        default: 
+          return sortByBreweryDesc;
+      }
+    }
 
     return <BeerList beers={
       filterBeers(beers, appliedFilters)
-        .sort((beer1, beer2) => beer1.brewery > beer2.brewery ? 1 : beer1.brewery === beer2.brewery ? 0 : -1)
+        .sort(sortBeers(sortingOption))
     } />
 
 }
 
-const mapStateToProps = ({beerList: {beers}, appliedFilters}) => {
-  return {beers, appliedFilters}
+const mapStateToProps = ({beerList: {beers}, appliedFilters, sortingOption}) => {
+  return {beers, appliedFilters, sortingOption}
 }
 
 // const mapDispatchToProps = (dispatch, { crafterbeerService }) => {

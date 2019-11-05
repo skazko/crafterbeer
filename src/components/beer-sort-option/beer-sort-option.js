@@ -3,21 +3,23 @@ import { connect } from 'react-redux';
 import { sortBeersHandler } from '../../actions';
 import './beer-sort-option.css';
 
-const BeerSortOption = ({icon, sortOption, label, closeHandler, sortBeersHandler}) => {
-  const radioChangeHandler = (e) => {
-    sortBeersHandler(e);
-    closeHandler();
-  }
+const BeerSortOption = ({icon, sortOption, label, closeHandler, sortBeersHandler, currentSortingOption}) => {
+
+  const currentOptionColor = sortOption === currentSortingOption ? {'--current-sorting-option-color': '#eeeeee'} : {};
   return (
-    <div className="beer-sort-option">
+    <div
+      style={currentOptionColor} 
+      className="beer-sort-option">
       {icon}
       <input 
         className="beer-sort-option__input"
+        checked={sortOption === currentSortingOption}
         id={sortOption} 
         type="radio" 
-        name="sortOption" 
+        name="sortOption"
         value={sortOption} 
-        onChange={radioChangeHandler} />
+        onChange={sortBeersHandler}
+        onClick={closeHandler} />
       <label 
         className="beer-sort-option__button"
         htmlFor={sortOption} >{label}
@@ -32,4 +34,10 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(BeerSortOption);
+const mapStateToProps = ({ sortingOption }) => {
+  return {
+    currentSortingOption: sortingOption
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BeerSortOption);

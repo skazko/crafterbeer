@@ -5,11 +5,9 @@ import './beer-sort-option.css';
 
 const BeerSortOption = ({icon, sortOption, label, closeHandler, sortBeersHandler, currentSortingOption}) => {
 
-  const currentOptionColor = sortOption === currentSortingOption ? {'--current-sorting-option-color': '#eeeeee'} : {};
   return (
     <div
-      style={currentOptionColor} 
-      className="beer-sort-option">
+      className={sortOption === currentSortingOption ? "beer-sort-option beer-sort-option_active" : "beer-sort-option"}>
       {icon}
       <input 
         className="beer-sort-option__input"

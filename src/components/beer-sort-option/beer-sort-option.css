@@ -1,8 +1,13 @@
 .beer-sort-option {
+  --active-color: #eeeeee;
   padding: 1rem;
   border-bottom: 1px solid #cccccc;
   display: flex;
-  background-color: var(--current-sorting-option-color, transparent);
+  background-color: transparent;
+}
+
+.beer-sort-option_active {
+  background-color: var(--active-color);
 }
 
 .beer-sort-option__input {

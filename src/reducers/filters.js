@@ -52,8 +52,6 @@ const updateAppliedFilters = (state, action) => {
     default: 
       return state.appliedFilters;
   }
-
-  
 }
 
 export default updateAppliedFilters;

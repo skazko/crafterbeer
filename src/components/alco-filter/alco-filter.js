@@ -62,12 +62,16 @@ class AlcoFilter extends Component {
   updateSliderSize = () => {
     const slider = document.getElementById('slider-alc');
     const thumb = slider.querySelector('div');
+    console.log('func update slider size');
     
     this.setState((state) => {
-      const {minAlc, maxAlc} = state;
+      const maxAlc = Math.min(this.props.maxAlc, this.props.appliedAlc.max);
+      const minAlc = Math.max(this.props.minAlc, this.props.appliedAlc.min);
       const newXToAlc = (this.props.maxAlc - this.props.minAlc) / (slider.offsetWidth - 2 * thumb.offsetWidth);
       
       return {
+        minAlc,
+        maxAlc,
         sliderLength: slider.offsetWidth,
         sliderLeft: slider.getBoundingClientRect().left,
         thumbWidth: thumb.offsetWidth,
@@ -79,8 +83,26 @@ class AlcoFilter extends Component {
   }
 
   componentDidMount() {
+    
     this.updateSliderSize();
     window.addEventListener('resize', this.updateSliderSize);
+  }
+
+  componentDidUpdate(prevProps) {
+    console.log('did update');
+    const {max, min} = this.props.appliedAlc;
+    const {max: prevMax, min: prevMin} = prevProps.appliedAlc;
+    const isMaxEqual = max === prevMax;
+    const isMinEqual = min === prevMin;
+   
+    
+    if (!isMaxEqual && !isMinEqual) {
+      
+      console.log(`max: ${max}   prevMax : ${prevMax}`);
+      console.log(`min: ${min}   prevMin : ${prevMin}`);
+      this.updateSliderSize();
+    }
+    
   }
 
   componentWillUnmount() {
@@ -228,6 +250,7 @@ class AlcoFilter extends Component {
 
   render() {
     const { maxAlc, minAlc, minX, maxX, thumbWidth } = this.state;
+    
     return (
       <div style={{ padding: '10px' }}>
         <FilterSlider id="slider-alc">

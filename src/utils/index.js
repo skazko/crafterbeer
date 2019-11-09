@@ -131,10 +131,25 @@ const filterBeers = (beers, appliedFilters) => {
           .filter((beer) => beer.alc >= minAlc && beer.alc <= maxAlc)
 } 
 
+const sortov = (num) => {
+  if ((num >= 10 && num <= 20) || num % 10 === 0 || num % 10 >= 5) {
+    return `сортов`
+  } else {
+    switch (num % 10) {
+      case 1: 
+        return `сорт`;
+      case 2:
+      case 3:
+      case 4:
+        return `сорта`;
+    }
+  }
+}
 
 export {
   strip,
   beergroundColor,
   compose,
-  filterBeers
+  filterBeers,
+  sortov
 }

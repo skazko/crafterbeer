@@ -255,11 +255,11 @@ class AlcoFilter extends Component {
       <div style={{ padding: '10px' }}>
         <FilterSlider id="slider-alc">
           <SliderThumb 
-            style={{left: `${minX}px`}}
+            style={{transform: `translateX(${minX}px)`}}
             onMouseDown={this.minAlcHandler}
             onTouchStart={this.minAlcHandler}/>
           <SliderThumb
-            style={{left: `${maxX}px`}}
+            style={{transform: `translateX(${maxX}px)`}}
             onMouseDown={this.maxAlcHandler}
             onTouchStart={this.maxAlcHandler}/>
           <SliderActiveRange style={{

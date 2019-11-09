@@ -1,0 +1,11 @@
+.header-info {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.header-info__digit {
+  font-weight: 700;
+  color: #008800;
+}

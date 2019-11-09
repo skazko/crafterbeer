@@ -5,6 +5,14 @@ import AlcoFilter from './alco-filter';
 import FilterContainer from './filter-container';
 import StyleFilter from './style-filter';
 import BreweryFilter from './brewery-filter';
+import BeerSortOption from './beer-sort-option';
+
+import {
+  AscIcon, 
+  DescIcon,
+  ABAscIcon,
+  ABDescIcon
+} from './icons';
 
 const HeaderFilters = styled.ul`
   
@@ -64,6 +72,16 @@ const Header = ({ filters, updateStyleFilter, updateBreweryFilter, updateAlcFilt
         <FilterContainer name="Стили">
           <FilterWrapper>
             <StyleFilter styles={styles} updateStyleFilter={updateStyleFilter}/>
+          </FilterWrapper>
+        </FilterContainer>
+      </HeaderFilter>
+      <HeaderFilter style={{marginLeft: 'auto'}} >
+        <FilterContainer name="Сортировать">
+          <FilterWrapper style={{right: 0}}>
+            <BeerSortOption icon={<AscIcon />} closeHandler={()=>{}} sortOption={'alcoAsc'} label="Алкоголь: от легкого к крепкому"></BeerSortOption>
+            <BeerSortOption icon={<DescIcon />} closeHandler={()=>{}} sortOption={'alcoDesc'} label="Алкоголь: от крепкого к легкому"></BeerSortOption>
+            <BeerSortOption icon={<ABDescIcon />} closeHandler={()=>{}} sortOption={'breweryDesc'} label="Пивоварня: по убыванию"></BeerSortOption>
+            <BeerSortOption icon={<ABAscIcon />} closeHandler={()=>{}} sortOption={'breweryAsc'} label="Пивоварня: по возрастанию"></BeerSortOption>
           </FilterWrapper>
         </FilterContainer>
       </HeaderFilter>

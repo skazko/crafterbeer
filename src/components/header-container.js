@@ -4,6 +4,8 @@ import { updateStyleFilter, updateBreweryFilter, updateAlcFilter } from '../acti
 import FilterMap from '../utils/filter-map';
 import Header from './header';
 import MobileHeader from './mobile-header/mobile-header';
+import HeaderInfo from './header-info';
+import Logo from './logo';
 
 const HeaderContainer = ({ beers, updateStyleFilter, updateBreweryFilter, updateAlcFilter, appliedAlc, appliedFilters }) => {
 
@@ -11,6 +13,10 @@ const HeaderContainer = ({ beers, updateStyleFilter, updateBreweryFilter, update
       
   return (
     <div className="header">
+      <div className="header__top-line">
+        <Logo size="52" />
+        <HeaderInfo beerCount={beers.length} averageAlc={7} />
+      </div>
       <Header filters={filterMap} updateStyleFilter={updateStyleFilter} 
             updateBreweryFilter={updateBreweryFilter} updateAlcFilter={updateAlcFilter}
             appliedAlc = {appliedAlc} />

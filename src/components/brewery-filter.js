@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FilterButton, FilterCheckbox, FilterList } from './filter-styled';
-
-const crafterbeerLogo = "https://crafterbeer.ru/wp-content/uploads/2019/02/logo-crafter-small-1.png";
+import { CRAFTER_LOGO } from '../constants';
 
 const BreweryListItem = styled.li`
   margin: 0 -1rem;
@@ -33,7 +32,7 @@ const BreweryLabel = styled(FilterButton)`
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
-    background-image: url('${props => props.breweryImg || crafterbeerLogo }');
+    background-image: url('${props => props.breweryImg || CRAFTER_LOGO }');
   }
 `;
 

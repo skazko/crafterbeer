@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './filter-container.css';
+import { PlusIcon } from '../icons';
 
 export default class FilterContainer extends Component {
   state = {
@@ -58,9 +59,13 @@ export default class FilterContainer extends Component {
   
   render() {
     const filter = this.state.isOpened ? this.props.children : null;
+    const rotate = this.state.isOpened ? 45 : 0;
     return (
       <div className="filter-container">
-        <button className="filter-container__button" onClick={this.buttonClickHandler}>{this.props.name}</button>
+        <button className="filter-container__button" onClick={this.buttonClickHandler}>
+          {this.props.name}
+          <PlusIcon rotate={rotate}/>
+        </button>
         {filter}
       </div>
     );

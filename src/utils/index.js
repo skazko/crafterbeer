@@ -142,6 +142,8 @@ const sortov = (num) => {
       case 3:
       case 4:
         return `сорта`;
+      default: 
+        return `сорта(ов)`;
     }
   }
 }

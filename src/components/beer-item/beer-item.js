@@ -3,9 +3,24 @@ import Bottle from '../bottle';
 import { beergroundColor } from '../../utils';
 import './beer-item.scss';
 
+function makeFeatures(beer) {
+  const features = [];
+  if (beer.alc) {
+    features.push({name: 'abv', value: beer.alc});
+  }
+  if (beer.og) {
+    features.push({name: 'og', value: beer.og});
+  }
+  if (beer.ibu) {
+    features.push({name: 'ibu', value: beer.ibu});
+  }
+  return features;
+}
+
 const BeerItem = ({ beer }) => {
-  const {id, imgSrc, imgAlt, features, style, price} = beer;
+  const {id, imgSrc, imgAlt, style, price} = beer;
   const { backColor, frontColor, shadowString } = beergroundColor(style);
+  const features = makeFeatures(beer);
 
   return (
     <li className="beer-item">

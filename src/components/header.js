@@ -21,7 +21,7 @@ const HeaderFilters = styled.ul`
   
   @media (min-width: 768px) {
     margin: 0;
-    padding: 20px;
+    padding: 20px 4px;
     list-style: none;
     display: flex;
     flex-direction: row;
@@ -30,7 +30,7 @@ const HeaderFilters = styled.ul`
 `;
 
 const HeaderFilter = styled.li`
-  margin-bottom: 20px;
+
 `;
 
 const FilterWrapper = styled.div`

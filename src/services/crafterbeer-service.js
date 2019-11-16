@@ -4,14 +4,21 @@ import { strip } from '../utils';
 
 export default class CrafterbeerService {
 
-  get() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const beerData = testData.map(this._transformBeerData);
-        resolve(beerData);
-      }, 700);
-    });
+  async get() {
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const targetUrl = 'https://crafterbeer.ru/wp-admin/admin-ajax.php?action=test-ajax';
+    const res = await fetch(proxyUrl + targetUrl);
+    return await res.json();
   }
+
+  // get() {
+  //   return new Promise((resolve) => {
+  //     setTimeout(() => {
+  //       const beerData = testData.map(this._transformBeerData);
+  //       resolve(beerData);
+  //     }, 700);
+  //   });
+  // }
 
   // Пивоварни в свойствах testData не имеют картинок. 
   // Картинки получаем из категорий (пивоварни) бутылочного пива
@@ -42,29 +49,6 @@ export default class CrafterbeerService {
       images : [{src: imgSrc, alt: imgAlt, name: imgName}]
     } = beerItem;
 
-    const tth = attributes.map((attribute) => {
-      const {id, name, options: [value]} = attribute;
-      
-      if (id === 1 || id === 2 || id === 3) {
-        return {
-          name,
-          value: parseFloat(value.replace(/,/, ".").replace(/[^\d.]/g, ""))
-        }
-      } else {
-        return { name, value };
-      }
-    });
-
-    const features = attributes
-      .filter(({ id }) => id === 1 || id === 2 || id === 3)
-      .map(({id, options: [value]}) => {
-        const name = id === 1 ? 'abv' : id === 2 ? 'og' : 'ibu';
-        return {
-          name,
-          value: parseFloat(value.replace(/,/, ".").replace(/[^\d.]/g, ""))
-        }
-      });
-    
     let alc;
     if (attributes.findIndex(({ id }) => id === 1) >= 0) {
       alc = parseFloat(attributes.find(({ id }) => id === 1).options[0].replace(/,/, ".").replace(/[^\d.]/g, ""));
@@ -73,7 +57,7 @@ export default class CrafterbeerService {
     }
 
     let og;
-    if (attributes.find(({ id }) => id === 2) >= 0) {
+    if (attributes.findIndex(({ id }) => id === 2) >= 0) {
       og = parseFloat(attributes.find(({ id }) => id === 2).options[0].replace(/,/, ".").replace(/[^\d.]/g, ""));
     } else {
       og = null;
@@ -105,8 +89,6 @@ export default class CrafterbeerService {
       inStock: stock_status === 'instock' ? true : false,
       imgSrc,
       imgAlt: imgAlt || imgName,
-      tth,
-      features,
       brewery,
       breweryImg,
       style,

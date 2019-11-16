@@ -1,21 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { updateStyleFilter, updateBreweryFilter, updateAlcFilter } from '../actions';
-import FilterMap from '../utils/filter-map';
-import Header from './header';
-import MobileHeader from './mobile-header/mobile-header';
-import HeaderInfo from './header-info';
-import Logo from './logo';
+import { updateStyleFilter, updateBreweryFilter, updateAlcFilter } from '../../actions';
+import FilterMap from '../../utils/filter-map';
+import Header from '../header';
+import MobileHeader from '../mobile-header/mobile-header';
+import HeaderInfo from '../header-info';
+import Logo from '../logo';
+import './header-container.css';
+
+function getAverageAlc(beers) {
+  return Math.round(beers.reduce((alcSum, beer) => {
+    return alcSum + beer.alc;
+  }, 0) * 10 / beers.length ) / 10;
+}
 
 const HeaderContainer = ({ beers, updateStyleFilter, updateBreweryFilter, updateAlcFilter, appliedAlc, appliedFilters }) => {
 
   const filterMap = new FilterMap(beers, appliedFilters);
       
   return (
-    <div className="header">
+    <div className="header-container">
       <div className="header__top-line">
         <Logo size="52" />
-        <HeaderInfo beerCount={beers.length} averageAlc={7} />
+        <HeaderInfo beerCount={beers.length} averageAlc={getAverageAlc(beers)} />
       </div>
       <Header filters={filterMap} updateStyleFilter={updateStyleFilter} 
             updateBreweryFilter={updateBreweryFilter} updateAlcFilter={updateAlcFilter}

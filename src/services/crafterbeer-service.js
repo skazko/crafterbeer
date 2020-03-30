@@ -7,12 +7,19 @@ export default class CrafterbeerService {
   async get() {
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
     const targetUrl = 'https://crafterbeer.ru/wp-admin/admin-ajax.php?action=test-ajax';
-    const res = await fetch(proxyUrl + targetUrl);
-    if (res.ok) {
-      return await res.json();
-    } else {
-      console.error(res.status);
-      return this.getTestData()
+
+    try {
+      const res = await fetch(proxyUrl + targetUrl);
+      if (res.ok) {
+        return await res.json();
+      } else {
+        console.error('Response status: ', res.status);
+        console.error('Test data will be loaded');
+        return this.getTestData();
+      }
+    } catch {
+      console.error(proxyUrl + ' is unavailable, test data will be loaded');
+      return this.getTestData();
     }
   }
 

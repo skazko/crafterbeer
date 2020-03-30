@@ -8,17 +8,22 @@ export default class CrafterbeerService {
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
     const targetUrl = 'https://crafterbeer.ru/wp-admin/admin-ajax.php?action=test-ajax';
     const res = await fetch(proxyUrl + targetUrl);
-    return await res.json();
+    if (res.ok) {
+      return await res.json();
+    } else {
+      console.error(res.status);
+      return this.getTestData()
+    }
   }
 
-  // get() {
-  //   return new Promise((resolve) => {
-  //     setTimeout(() => {
-  //       const beerData = testData.map(this._transformBeerData);
-  //       resolve(beerData);
-  //     }, 700);
-  //   });
-  // }
+  getTestData() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const beerData = testData.map(this._transformBeerData);
+        resolve(beerData);
+      }, 500);
+    });
+  }
 
   // Пивоварни в свойствах testData не имеют картинок. 
   // Картинки получаем из категорий (пивоварни) бутылочного пива
